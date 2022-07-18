@@ -14,6 +14,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     console.log('This action adds a new user');
+    console.log(createUserDto);
     return await this.contactRepository.save(createUserDto);
   }
 
