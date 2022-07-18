@@ -1,13 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
+import { UsersErrors } from '../errors/users.errors';
 
 @Injectable()
 export class UsersService {
@@ -17,14 +14,18 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    await this.validCreate(createUserDto);
+    UsersErrors.validUserDto(createUserDto);
+
+    const userRegistred = await this.findByEmail(createUserDto.email);
+    UsersErrors.validCreate(userRegistred);
+
     return await this.userRepository.save(createUserDto);
   }
 
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();
 
-    if (users.length === 0) await this.usersEmpty();
+    if (users.length === 0) UsersErrors.usersEmpty();
 
     return users;
   }
@@ -32,7 +33,7 @@ export class UsersService {
   async findOne(id: number): Promise<User> {
     const user = await this.userRepository.findOne({ where: [{ id }] });
 
-    if (!user) await this.userNotFound(id);
+    if (!user) await UsersErrors.userNotFound(id);
 
     return user;
   }
@@ -40,7 +41,7 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
     const updateResult = await this.userRepository.update(id, updateUserDto);
 
-    if (updateResult.affected === 0) await this.userNotFound(id);
+    if (updateResult.affected === 0) UsersErrors.userNotFound(id);
 
     return {
       message: `Usuário de id #${id} alterado com sucesso.`,
@@ -50,7 +51,7 @@ export class UsersService {
   async remove(id: number): Promise<any> {
     const deleteResult = await this.userRepository.delete(id);
 
-    if (deleteResult.affected === 0) await this.userNotFound(id);
+    if (deleteResult.affected === 0) UsersErrors.userNotFound(id);
 
     return {
       message: `Usuário de id #${id} removido com sucesso.`,
@@ -59,31 +60,5 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User> {
     return await this.userRepository.findOne({ where: [{ email }] });
-  }
-
-  public async validCreate(createUserDto: CreateUserDto) {
-    if (!createUserDto.email)
-      throw new BadRequestException('E-mail é um campo obrigatório.');
-
-    if (!createUserDto.password)
-      throw new BadRequestException('Senha é um campo obrigatório.');
-
-    const userRegistred = await this.findByEmail(createUserDto.email);
-    if (userRegistred)
-      throw new BadRequestException(
-        'O usuário já está registrado na base de dados.',
-      );
-  }
-
-  public async userNotFound(id: number) {
-    throw new NotFoundException(
-      `Usuário de id #${id} não encontrado na base de dados.`,
-    );
-  }
-
-  public async usersEmpty() {
-    throw new BadRequestException(
-      'Não existem usuários registrados na base de dados.',
-    );
   }
 }
