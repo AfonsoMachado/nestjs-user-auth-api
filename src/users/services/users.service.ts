@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
@@ -9,35 +13,71 @@ import { User } from '../entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private contactRepository: Repository<User>,
+    private userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    console.log('This action adds a new user');
-    console.log(createUserDto);
-    return await this.contactRepository.save(createUserDto);
+    await this.validCreate(createUserDto);
+    return await this.userRepository.save(createUserDto);
   }
 
   async findAll(): Promise<User[]> {
-    console.log('This action returns all users');
-    return await this.contactRepository.find();
+    const users = await this.userRepository.find();
+
+    if (users.length === 0) await this.usersEmpty();
+
+    return users;
   }
 
   async findOne(id: number): Promise<User> {
-    console.log(`This action returns a #${id} user`);
-    return await this.contactRepository.findOne({ where: [{ id }] });
+    const user = await this.userRepository.findOne({ where: [{ id }] });
+
+    if (!user) await this.userNotFound(id);
+
+    return user;
   }
 
-  async update(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UpdateResult> {
-    console.log(`This action updates a #${id} user`);
-    return await this.contactRepository.update(id, updateUserDto);
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
+    const updateResult = await this.userRepository.update(id, updateUserDto);
+
+    if (updateResult.affected === 0) await this.userNotFound(id);
+
+    return {
+      message: `Usuário de id #${id} alterado com sucesso.`,
+    };
   }
 
-  async remove(id: number): Promise<DeleteResult> {
-    console.log(`This action removes a #${id} user`);
-    return await this.contactRepository.delete(id);
+  async remove(id: number): Promise<any> {
+    const deleteResult = await this.userRepository.delete(id);
+
+    if (deleteResult.affected === 0) await this.userNotFound(id);
+
+    return {
+      message: `Usuário de id #${id} removido com sucesso.`,
+    };
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOne({ where: [{ email }] });
+  }
+
+  public async validCreate(createUserDto: CreateUserDto) {
+    const userRegistred = await this.findByEmail(createUserDto.email);
+    if (userRegistred)
+      throw new BadRequestException(
+        'O usuário já está registrado na base de dados.',
+      );
+  }
+
+  public async userNotFound(id: number) {
+    throw new NotFoundException(
+      `Usuário de id #${id} não encontrado na base de dados.`,
+    );
+  }
+
+  public async usersEmpty() {
+    throw new BadRequestException(
+      'Não existem usuários registrados na base de dados.',
+    );
   }
 }
