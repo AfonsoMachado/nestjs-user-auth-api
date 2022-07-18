@@ -62,6 +62,12 @@ export class UsersService {
   }
 
   public async validCreate(createUserDto: CreateUserDto) {
+    if (!createUserDto.email)
+      throw new BadRequestException('E-mail é um campo obrigatório.');
+
+    if (!createUserDto.password)
+      throw new BadRequestException('Senha é um campo obrigatório.');
+
     const userRegistred = await this.findByEmail(createUserDto.email);
     if (userRegistred)
       throw new BadRequestException(
