@@ -8,7 +8,7 @@ import {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  _id: number;
+  id: number;
 
   @Column()
   email: string;
