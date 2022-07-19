@@ -31,6 +31,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService) as ConfigService<any>;
   swaggerConfig(app, configService);
 
-  await app.listen(3000);
+  const port = configService.get('PORT');
+  if (!port) throw new Error('A porta da aplicação não foi configurada.');
+
+  await app.listen(port);
 }
 bootstrap();
