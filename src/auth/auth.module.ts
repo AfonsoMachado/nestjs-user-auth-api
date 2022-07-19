@@ -13,13 +13,22 @@ import { JwtModule } from '@nestjs/jwt';
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        const expiresIn = configService.get<string>('JWT_EXPIRESIN');
+
+        if (!secret)
+          throw Error('A chave de criptografia do token jwt não configurada');
+
+        return {
+          secret,
+          signOptions: { expiresIn: expiresIn || '1d' },
+        };
+      },
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ConfigService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}
