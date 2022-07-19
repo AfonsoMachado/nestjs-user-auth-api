@@ -9,6 +9,7 @@ function swaggerConfig(app: INestApplication) {
     .setTitle('NestJS API')
     .setDescription('NestJS CRUD API with Authtentication')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

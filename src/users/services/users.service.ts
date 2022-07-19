@@ -73,4 +73,8 @@ export class UsersService {
   async findByEmail(email: string): Promise<User> {
     return await this.userRepository.findOne({ where: [{ email }] });
   }
+
+  async comparePassword(password: string, hash: string) {
+    return await bcrypt.compare(password, hash);
+  }
 }
