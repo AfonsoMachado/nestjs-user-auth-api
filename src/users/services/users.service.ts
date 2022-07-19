@@ -5,6 +5,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 import { UsersErrors } from '../errors/users.errors';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,9 @@ export class UsersService {
     const userRegistred = await this.findByEmail(createUserDto.email);
     UsersErrors.validCreate(userRegistred);
 
-    return await this.userRepository.save(createUserDto);
+    const userDtoTransformed = await this.transformBody(createUserDto);
+
+    return await this.userRepository.save(userDtoTransformed);
   }
 
   async findAll(): Promise<User[]> {
@@ -54,6 +57,17 @@ export class UsersService {
     return {
       message: `Usuário de id #${id} removido com sucesso.`,
     };
+  }
+
+  private async encryptPassword(password: string) {
+    return await bcrypt.hash(password, 12);
+  }
+
+  private async transformBody(createUserDto: CreateUserDto) {
+    createUserDto.email = createUserDto.email.toLowerCase();
+    createUserDto.password = await this.encryptPassword(createUserDto.password);
+
+    return createUserDto;
   }
 
   async findByEmail(email: string): Promise<User> {
