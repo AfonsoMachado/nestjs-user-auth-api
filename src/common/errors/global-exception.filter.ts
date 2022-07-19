@@ -1,57 +1,56 @@
 import {
   ArgumentsHost,
-  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
   HttpStatus,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { QueryFailedError, EntityPropertyNotFoundError } from 'typeorm';
-import { GlobalResponseError } from './global-response.error';
+import { TypeORMError } from 'typeorm';
+
+interface IError {
+  name: string;
+  message: string;
+}
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
-    let message = (exception as any).message.message;
-    let code = 'HttpException';
+  private readonly logger = new Logger(GlobalExceptionFilter.name);
 
-    Logger.error(
-      message,
-      (exception as any).stack,
-      `${request.method} ${request.url}`,
+  private loggerError(statusCode: number, error: unknown) {
+    this.logger.error(
+      `Http Status: ${statusCode} Error Message: ${JSON.stringify(error)}`,
     );
+  }
 
-    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+  catch(exception: IError, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse();
 
-    switch (exception.constructor) {
-      case NotFoundException:
-        status = (exception as HttpException).getStatus();
-        message = (exception as NotFoundException).message;
-        code = (exception as HttpException).name;
-      case BadRequestException:
-        status = (exception as HttpException).getStatus();
-        message = (exception as BadRequestException).message;
-        code = (exception as HttpException).name;
-      case HttpException:
-        status = (exception as HttpException).getStatus();
-        break;
-      case EntityPropertyNotFoundError:
-        status = HttpStatus.UNPROCESSABLE_ENTITY;
-        message = (exception as QueryFailedError).message;
-        code = (exception as any).code;
-        break;
-      default:
-        status = HttpStatus.INTERNAL_SERVER_ERROR;
+    console.log(exception instanceof HttpException);
+
+    const statusCode =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+
+    const error =
+      exception instanceof HttpException
+        ? (exception.getResponse() as IError)
+        : exception;
+
+    if (error.name === 'ValidationError' || error instanceof TypeORMError) {
+      const errorMessage = {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: error.message,
+        error: error.name,
+      };
+
+      this.loggerError(HttpStatus.BAD_REQUEST, errorMessage);
+      return response.status(HttpStatus.BAD_REQUEST).json(errorMessage);
     }
 
-    response
-      .status(status)
-      .json(GlobalResponseError(status, message, code, request));
+    this.loggerError(statusCode, error);
+    return response.status(statusCode).json(error);
   }
 }
