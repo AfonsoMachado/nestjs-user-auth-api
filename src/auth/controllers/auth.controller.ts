@@ -15,7 +15,7 @@ export class AuthController {
   }
 
   @AuthUser()
-  @Get()
+  @Get('test')
   async test() {
     return 'Success!';
   }

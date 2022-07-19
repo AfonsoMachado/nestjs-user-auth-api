@@ -1,19 +1,25 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/errors/global-exception.filter';
 
-function swaggerConfig(app: INestApplication) {
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('NestJS API')
-    .setDescription('NestJS CRUD API with Authtentication')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+function swaggerConfig(
+  app: INestApplication,
+  configService: ConfigService<any>,
+) {
+  if (configService.get('APP_EXPOSE_DOCS') === 'true') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle(configService.get('APP_NAME'))
+      .setDescription(configService.get('APP_DESCRIPTION'))
+      .setVersion(configService.get('APP_VERSION'))
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup(configService.get('APP_DOCS_PATH'), app, document);
+  }
 }
 
 async function bootstrap() {
@@ -22,7 +28,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  swaggerConfig(app);
+  const configService = app.get(ConfigService) as ConfigService<any>;
+  swaggerConfig(app, configService);
+
   await app.listen(3000);
 }
 bootstrap();
