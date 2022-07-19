@@ -59,6 +59,10 @@ export class UsersService {
     };
   }
 
+  async removeAll() {
+    await this.userRepository.delete({});
+  }
+
   private async encryptPassword(password: string) {
     return await bcrypt.hash(password, 12);
   }
