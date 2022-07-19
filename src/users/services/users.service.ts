@@ -14,8 +14,6 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    UsersErrors.validUserDto(createUserDto);
-
     const userRegistred = await this.findByEmail(createUserDto.email);
     UsersErrors.validCreate(userRegistred);
 
