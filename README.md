@@ -1,9 +1,11 @@
-<table align="center"><tr><td align="center" width="9999">
-<a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="150" alt="Nest Logo" /></a>
+<p align="center">
 
-<p>
-  <h2>CRUD de usuários com autenticação JWT</h2>
-  <h3>Construído com o NestJS</h3>
+<a align="center" href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" align="center" width="150" alt="Nest Logo" /></a>
+</p>
+
+<p align="center">
+  <h2 align="center">CRUD de usuários com autenticação JWT</h2>
+  <h3 align="center">Construído com o NestJS</h3>
 </p>
 
 <p align="center">
@@ -15,8 +17,6 @@
   <a href="#books-documentação">Documentação</a>&nbsp;&nbsp;&nbsp;
 </p>
 
-</td></tr>
-</table>
 
 ## Descrição do Projeto
 
