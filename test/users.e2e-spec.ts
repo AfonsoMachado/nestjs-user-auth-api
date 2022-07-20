@@ -79,20 +79,6 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/users/:id (DELETE)', async () => {
-    const { user, token } = await registerAndAuthUser();
-
-    await request(app.getHttpServer())
-      .delete(`/users/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200)
-      .then((response) => {
-        expect(response.body.message).toEqual(
-          `Usuário de id #${user.id} removido com sucesso.`,
-        );
-      });
-  });
-
   it('/users/:id (PATCH)', async () => {
     const { user, token } = await registerAndAuthUser();
 
@@ -109,6 +95,60 @@ describe('AppController (e2e)', () => {
       .then((response) => {
         expect(response.body.message).toEqual(
           `Usuário de id #${user.id} alterado com sucesso.`,
+        );
+      });
+  });
+
+  it('/users/:id (GET) - Error 404', async () => {
+    const { token } = await registerAndAuthUser();
+
+    const invalidId = Math.random();
+
+    await request(app.getHttpServer())
+      .get(`/users/${invalidId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toEqual(
+          `Usuário de id #${invalidId} não encontrado na base de dados.`,
+        );
+      });
+  });
+
+  it('/users/:id (DELETE) - Error 404', async () => {
+    const { token } = await registerAndAuthUser();
+
+    const invalidId = Math.random();
+
+    await request(app.getHttpServer())
+      .delete(`/users/${invalidId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toEqual(
+          `Usuário de id #${invalidId} não encontrado na base de dados.`,
+        );
+      });
+  });
+
+  it('/users/:id (PATCH)', async () => {
+    const { token } = await registerAndAuthUser();
+
+    const userUpdated = {
+      email: 'new-user',
+      password: 'new-password',
+    };
+
+    const invalidId = Math.random();
+
+    await request(app.getHttpServer())
+      .patch(`/users/${invalidId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(userUpdated)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.message).toEqual(
+          `Usuário de id #${invalidId} não encontrado na base de dados.`,
         );
       });
   });
