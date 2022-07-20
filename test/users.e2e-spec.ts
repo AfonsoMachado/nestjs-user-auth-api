@@ -64,4 +64,52 @@ describe('AppController (e2e)', () => {
         expect(response.body).toMatchObject(user);
       });
   });
+
+  it('/users/:id (DELETE)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    await request(app.getHttpServer())
+      .delete(`/users/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.message).toEqual(
+          `Usuário de id #${user.id} removido com sucesso.`,
+        );
+      });
+  });
+
+  it('/users/:id (DELETE)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    await request(app.getHttpServer())
+      .delete(`/users/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.message).toEqual(
+          `Usuário de id #${user.id} removido com sucesso.`,
+        );
+      });
+  });
+
+  it('/users/:id (PATCH)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    const userUpdated = {
+      email: 'new-user',
+      password: 'new-password',
+    };
+
+    await request(app.getHttpServer())
+      .patch(`/users/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(userUpdated)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.message).toEqual(
+          `Usuário de id #${user.id} alterado com sucesso.`,
+        );
+      });
+  });
 });
