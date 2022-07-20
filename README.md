@@ -1,10 +1,10 @@
 <table align="center"><tr><td align="center" width="9999">
 <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="150" alt="Nest Logo" /></a>
 
-<h2>CRUD de usuários com autenticação JWT</h2>
-<h3>Construído com o NestJS</h3>
-
----
+<p>
+  <h2>CRUD de usuários com autenticação JWT</h2>
+  <h3>Construído com o NestJS</h3>
+</p>
 
 <p align="center">
   <a href="#descrição-do-projeto">Descrição do Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -122,7 +122,7 @@ da API necessita estar inicializado.
 
 ```bash
 # Documentação swagger.
-Ex.: http://localhost:3000/docs ou http://www.dominio-api.com/docs
+Ex.: http://localhost:3000/docs
 ```
 ---
 
