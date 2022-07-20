@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module';
 import { generateUser } from './utils/faker-data';
 import { UsersService } from '../src/users/services/users.service';
 import { mockService } from './utils/mock-service';
+import { registerAndAuthUser } from './utils/auth-user';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -36,6 +37,30 @@ describe('AppController (e2e)', () => {
       .expect(201)
       .then((response) => {
         delete user.password;
+        expect(response.body).toMatchObject(user);
+      });
+  });
+
+  it('/users (GET)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    await request(app.getHttpServer())
+      .get('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toContainEqual(user);
+      });
+  });
+
+  it('/users/:id (GET)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    await request(app.getHttpServer())
+      .get(`/users/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then((response) => {
         expect(response.body).toMatchObject(user);
       });
   });
