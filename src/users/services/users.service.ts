@@ -40,7 +40,11 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
-    const updateResult = await this.userRepository.update(id, updateUserDto);
+    const userDtoTransformed = await this.transformBody(updateUserDto);
+    const updateResult = await this.userRepository.update(
+      id,
+      userDtoTransformed,
+    );
 
     if (updateResult.affected === 0) UsersErrors.userNotFound(id);
 
@@ -67,9 +71,13 @@ export class UsersService {
     return await bcrypt.hash(password, 12);
   }
 
-  private async transformBody(createUserDto: CreateUserDto) {
-    createUserDto.email = createUserDto.email.toLowerCase();
-    createUserDto.password = await this.encryptPassword(createUserDto.password);
+  private async transformBody(createUserDto: UpdateUserDto) {
+    createUserDto.email &&
+      (createUserDto.email = createUserDto.email.toLowerCase());
+    createUserDto.password &&
+      (createUserDto.password = await this.encryptPassword(
+        createUserDto.password,
+      ));
 
     return createUserDto;
   }
