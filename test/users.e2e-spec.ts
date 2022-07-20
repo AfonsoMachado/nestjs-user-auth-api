@@ -99,8 +99,15 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/users/:id (GET) - Error 404', async () => {
-    const { token } = await registerAndAuthUser();
+  it('/users/:id (GET) - Errors (404/401)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    await request(app.getHttpServer())
+      .get(`/users/${user.id}`)
+      .expect(401)
+      .then((response) =>
+        expect(response.body.message).toEqual('Unauthorized'),
+      );
 
     const invalidId = Math.random();
 
@@ -115,8 +122,15 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/users/:id (DELETE) - Error 404', async () => {
-    const { token } = await registerAndAuthUser();
+  it('/users/:id (DELETE) - Errors (404/401)', async () => {
+    const { user, token } = await registerAndAuthUser();
+
+    await request(app.getHttpServer())
+      .delete(`/users/${user.id}`)
+      .expect(401)
+      .then((response) =>
+        expect(response.body.message).toEqual('Unauthorized'),
+      );
 
     const invalidId = Math.random();
 
@@ -131,13 +145,21 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/users/:id (PATCH)', async () => {
-    const { token } = await registerAndAuthUser();
+  it('/users/:id (PATCH) - Errors (404/401)', async () => {
+    const { user, token } = await registerAndAuthUser();
 
     const userUpdated = {
       email: 'new-user',
       password: 'new-password',
     };
+
+    await request(app.getHttpServer())
+      .patch(`/users/${user.id}`)
+      .send(userUpdated)
+      .expect(401)
+      .then((response) =>
+        expect(response.body.message).toEqual('Unauthorized'),
+      );
 
     const invalidId = Math.random();
 

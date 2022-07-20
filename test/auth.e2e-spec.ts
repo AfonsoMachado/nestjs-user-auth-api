@@ -24,10 +24,19 @@ describe('AppController (e2e)', () => {
   it('/test (GET)', async () => {
     const { token } = await registerAndAuthUser();
 
-    return request(app.getHttpServer())
+    return await request(app.getHttpServer())
       .get('/auth/test')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect('Success!');
+  });
+
+  it('/test (GET) - Error 401', async () => {
+    return await request(app.getHttpServer())
+      .get('/auth/test')
+      .expect(401)
+      .then((response) =>
+        expect(response.body.message).toEqual('Unauthorized'),
+      );
   });
 });
