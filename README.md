@@ -1,73 +1,129 @@
+<table align="center"><tr><td align="center" width="9999">
+<a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="150" alt="Nest Logo" /></a>
+
+<h2>CRUD de usuários com autenticação JWT</h2>
+<h3>Construído com o NestJS</h3>
+
+---
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <a href="#descrição-do-projeto">Descrição do Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#computer-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#bookmark-variáveis-de-ambiente">Variáveis de Ambiente</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#fire-executando-o-projeto">Executando o Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#watch-testes-e2e">Testes E2E</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#books-documentação">Documentação</a>&nbsp;&nbsp;&nbsp;
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+</td></tr>
+</table>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Descrição do Projeto
 
-## Description
+Este projeto é uma API de cadastros de usuários, contendo todos os endpoints básicos de um CRUD, além de uma autenticação via JWT. Foi completamente construído usando o framework [NestJS](https://nestjs.com/) e seus módulos para auxílio no desenvolvimento.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Além da API, neste projeto está contida uma integração com um banco de dados local SQLite usando TypeORM, documentação utilizado Swagger e testes E2E para comprovação do funcionamento da API.
 
-## Installation
+## :computer: Tecnologias
+
+Tecnologias utilizadas para o desenvolvimento da API:
+
+- [Bcrypt](https://www.npmjs.com/package/bcrypt/)
+- [Class Validator](https://github.com/typestack/class-validator#readme)
+- [Express](https://expressjs.com/pt-br/)
+- [Jest](https://jestjs.io/)
+- [JWT](https://jwt.io/)
+- [Node.js](https://nodejs.org/en/)
+- [NestJS](https://nestjs.com/)
+- [Npm](https://www.npmjs.com/)
+- [Passport](https://www.passportjs.org/)
+- [passport-jwt](https://github.com/mikenicholson/passport-jwt)
+- [SQLite3](https://github.com/TryGhost/node-sqlite3)
+- [SuperTest](https://www.npmjs.com/package/supertest/)
+- [Swagger](https://swagger.io/)
+- [TypeORM](https://typeorm.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+
+## :bookmark: Variáveis de ambiente 
+
+As variáveis de ambiente utilizadas no projeto estão especificadas no arquivo *.env.example*, para usá-las é nescessário realizar uma cópia desse arquivo, preencher cada variável e renomear o mesmo para *.env*. Quaisquer alterações devem ser feitas nesse arquivo antes de executar a API:
+
+**Variáveis de ambiente presentes no .env do projeto**
 
 ```bash
-$ npm install
+# Porta de execução da API
+PORT=3000
+
+# Permissão para ativar documentação
+APP_EXPOSE_DOCS=true
+# Nome da API
+APP_NAME=NestJS API
+# Descrição da API
+APP_DESCRIPTION="NestJS CRUD API with Authtentication"
+# Versão da API
+APP_VERSION=1.0
+# Caminho para a documentação da API
+APP_DOCS_PATH=docs
+
+# Estratégia de autenticação JWT (Deve ser alterado)
+JWT_SECRET=<YOUR_JWT_SECRET>
+# Limite de expiração do token JWT
+JWT_EXPIRESIN=1h
+
+# Caminho para o banco de dados príncipal
+DB_PATH='./database/database.sqlite'
+# Caminho para o banco de dados de teste
+DB_TEST_PATH='./database/database-test.sqlite'
 ```
 
-## Running the app
+## :fire: Executando o projeto
+
+### Requisitos Necessários
+
+- [Node.js](https://nodejs.org/en/) (Foi utilizada a versão 16.16.0 durante o desenvolvimento)
+- [npm](https://www.npmjs.com/) ou [Yarn](https://classic.yarnpkg.com/)
+
+**Instalação e execução**
 
 ```bash
-# development
+# Instale todas as dependências necessárias:
+$ npm install
+
+# Para iniciar o servidor da API:
 $ npm run start
 
-# watch mode
+# Caso queira iniciar o servidor da API em modo assistido:
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
+# Após isso, o projeto pode ser inicializado e os endpoints estarão prontos para ser utilizados!
 ```
 
-## Test
+## :watch: Testes E2E
+
+Essa API foi construída com o auxílio do [Jest](https://jestjs.io/) para a implementação de testes, com o objetivo de validar o funcionamento da aplicação.
+
+**Comandos para executar testes**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
+# Para executar todos os testes e2e:
 $ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
+# Para executar um teste específico do projeto:
+$ npm run test:e2e "nome do arquivo"
 ```
 
-## Support
+## :books: Documentação
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Para ter acesso a documentação do projeto, contendo todas as informações para utilizar os
+endpoints da API, é necessário utilizar como no exemplo abaixo, lembrando que o servidor
+da API necessita estar inicializado.
 
-## Stay in touch
+> Obs.: É possível alterar o padrão de rota "/docs" para algum desejado, para isso temos a variável de ambiente "APP_DOCS_PATH".
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Documentação swagger.
+Ex.: http://localhost:3000/docs ou http://www.dominio-api.com/docs
+```
+---
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+<p align="center">Feito com 💜 por <strong><a href="https://www.linkedin.com/company/blockhub-builders/">BlockHub Builders</a> 🥰 </strong> </p>
