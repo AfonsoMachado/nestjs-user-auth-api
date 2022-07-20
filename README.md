@@ -1,11 +1,7 @@
-<p align="center">
-<img src="https://nestjs.com/img/logo-small.svg" align="center" width="150" alt="Nest Logo" />
-</p>
+<table align="center"><tr><td align="center" width="9999">
+<a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="150" alt="Nest Logo" /></a>
 
-<p align="center">
-  <h2 align="center">CRUD de usuários com autenticação JWT</h2>
-  <h3 align="center">Construído com o NestJS</h3>
-</p>
+<h2>NestJS | CRUD de usuários com autenticação JWT</h2>
 
 <p align="center">
   <a href="#descrição-do-projeto">Descrição do Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -16,6 +12,8 @@
   <a href="#books-documentação">Documentação</a>&nbsp;&nbsp;&nbsp;
 </p>
 
+</td></tr>
+</table>
 
 ## Descrição do Projeto
 
@@ -121,7 +119,7 @@ da API necessita estar inicializado.
 
 ```bash
 # Documentação swagger.
-Ex.: http://localhost:3000/docs
+Ex.: http://localhost:3000/docs ou http://www.dominio-api.com/docs
 ```
 ---
 
