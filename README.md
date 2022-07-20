@@ -1,6 +1,5 @@
 <p align="center">
-
-<a align="center" href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" align="center" width="150" alt="Nest Logo" /></a>
+<img src="https://nestjs.com/img/logo-small.svg" align="center" width="150" alt="Nest Logo" />
 </p>
 
 <p align="center">
