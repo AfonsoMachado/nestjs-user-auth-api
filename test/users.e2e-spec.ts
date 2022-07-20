@@ -11,6 +11,8 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
   let usersService: UsersService;
 
+  process.env.NODE_ENV = 'test';
+
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -26,6 +28,7 @@ describe('AppController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
+    process.env.NODE_ENV = '';
   });
 
   it('/users (POST)', async () => {

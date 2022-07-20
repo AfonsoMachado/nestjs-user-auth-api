@@ -7,6 +7,8 @@ import { registerAndAuthUser } from './utils/auth-user';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
+  process.env.NODE_ENV = 'test';
+
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -19,6 +21,7 @@ describe('AppController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
+    process.env.NODE_ENV = '';
   });
 
   it('/test (GET)', async () => {
