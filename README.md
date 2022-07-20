@@ -19,7 +19,7 @@
 
 Este projeto é uma API de cadastros de usuários, contendo todos os endpoints básicos de um CRUD, além de uma autenticação via JWT. Foi completamente construído usando o framework [NestJS](https://nestjs.com/) e seus módulos para auxílio no desenvolvimento.
 
-Além da API, neste projeto está contida uma integração com um banco de dados local SQLite usando TypeORM, documentação utilizado Swagger e testes E2E para comprovação do funcionamento da API.
+Além da API, neste projeto está contida uma integração com um banco de dados local SQLite usando TypeORM, documentação utilizado Swagger e testes E2E para validação do funcionamento da API.
 
 ## :computer: Tecnologias
 
@@ -119,7 +119,7 @@ da API necessita estar inicializado.
 
 ```bash
 # Documentação swagger.
-Ex.: http://localhost:3000/docs ou http://www.dominio-api.com/docs
+Ex.: http://localhost:3000/docs
 ```
 ---
 
