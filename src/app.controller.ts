@@ -1,5 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiProperty } from '@nestjs/swagger';
+
+class Status {
+  @ApiProperty({ description: 'OK' })
+  status: string;
+}
 
 @Controller()
 export class AppController {
@@ -8,15 +13,7 @@ export class AppController {
   })
   @ApiOkResponse({
     description: 'Aplicação executando',
-    schema: {
-      type: 'object',
-      properties: {
-        status: {
-          type: 'string',
-          description: 'OK',
-        },
-      },
-    },
+    type: Status,
   })
   @Get()
   getStatus(): any {
