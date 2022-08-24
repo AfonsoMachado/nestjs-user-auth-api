@@ -35,5 +35,7 @@ async function bootstrap() {
   if (!port) throw new Error('A porta da aplicação não foi configurada.');
 
   await app.listen(port);
+
+  console.info(`Servidor executando na porta ${port}`);
 }
 bootstrap();
