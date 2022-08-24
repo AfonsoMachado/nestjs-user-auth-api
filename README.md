@@ -123,4 +123,4 @@ Ex.: http://localhost:3000/docs
 ```
 ---
 
-<p align="center">Feito com 💜 por <strong><a href="https://www.linkedin.com/company/blockhub-builders/">BlockHub Builders</a> 🥰 </strong> </p>
+<p align="center">Feito com 💜 por <strong><a href="https://www.linkedin.com/in/AfonsoMachado/">Afonso Machado</a> 🥰 </strong> </p>
