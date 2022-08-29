@@ -85,10 +85,7 @@ describe('AppController (e2e)', () => {
   it('/users/:id (PATCH)', async () => {
     const { user, token } = await registerAndAuthUser();
 
-    const userUpdated = {
-      email: 'new-user',
-      password: 'new-password',
-    };
+    const userUpdated = generateUser();
 
     await request(app.getHttpServer())
       .patch(`/users/${user.id}`)
@@ -151,10 +148,7 @@ describe('AppController (e2e)', () => {
   it('/users/:id (PATCH) - Errors (404/401)', async () => {
     const { user, token } = await registerAndAuthUser();
 
-    const userUpdated = {
-      email: 'new-user',
-      password: 'new-password',
-    };
+    const userUpdated = generateUser();
 
     await request(app.getHttpServer())
       .patch(`/users/${user.id}`)
