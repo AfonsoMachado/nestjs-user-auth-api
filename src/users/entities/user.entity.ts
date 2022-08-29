@@ -22,12 +22,10 @@ export class User {
   password: string;
 
   @ApiProperty()
-  @Column()
   @CreateDateColumn()
   createdAt: Date;
 
   @ApiProperty()
-  @Column()
   @UpdateDateColumn()
   updatedAt: Date;
 }
