@@ -20,6 +20,10 @@ class UsersErrorHandler {
       'Não existem usuários registrados na base de dados.',
     );
   }
+
+  public userLoginFailed() {
+    throw new BadRequestException('E-mail ou senha estão incorretos');
+  }
 }
 
 export const UsersErrors = new UsersErrorHandler();
