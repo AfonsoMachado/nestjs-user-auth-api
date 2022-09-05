@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Sale } from 'src/sales/entities/sale.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -23,4 +23,8 @@ export class Product {
   @ApiProperty()
   @Column()
   price: number;
+
+  @ApiProperty()
+  @ManyToOne(() => Sale, (sale) => sale.products)
+  sale: Sale;
 }

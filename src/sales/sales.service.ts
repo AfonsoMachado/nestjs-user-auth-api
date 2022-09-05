@@ -1,8 +1,8 @@
+import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 import { Sale } from './entities/sale.entity';
 
@@ -13,12 +13,15 @@ export class SalesService {
     private saleRepository: Repository<Sale>,
   ) {}
 
-  async create(createSaleDto: CreateSaleDto, user: User) {
-    return await this.saleRepository.save({ seller: user });
+  async create(user: User, products: Product[]) {
+    return await this.saleRepository.save({ seller: user, products: products });
   }
 
   async findAll() {
-    return await this.saleRepository.find();
+    console.log(await this.saleRepository.find());
+    return await this.saleRepository.find({
+      loadRelationIds: { relations: ['seller', 'products'] },
+    });
   }
 
   async findOne(id: number) {

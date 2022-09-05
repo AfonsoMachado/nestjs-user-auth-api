@@ -2,9 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   CreateDateColumn,
   Entity,
-  JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
@@ -16,13 +15,12 @@ export class Sale {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ApiProperty()
-  // @OneToMany(() => Product, (product) => product.barCode)
-  // products: Product[];
+  @ApiProperty()
+  @OneToMany(() => Product, (product) => product.sale)
+  products: Product[];
 
   @ApiProperty()
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.sales)
   seller: User;
 
   @ApiProperty()
